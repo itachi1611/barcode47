@@ -1,4 +1,4 @@
-package com.example.myapp
+package com.fox.barcode47
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "560867969316",
+    "project_id": "barcode47-46578",
+    "storage_bucket": "barcode47-46578.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560867969316:android:a83bcadecbb3779f9ccbb1",
+        "android_client_info": {
+          "package_name": "com.fox.barcode47"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_brx7BmIKEfgRdAzUuBI47MC2c1rij2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
