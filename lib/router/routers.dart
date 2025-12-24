@@ -10,5 +10,5 @@ enum Routers {
   final String routerName;
   final String routerPath;
 
-  const Routers(this.routerName, this.routerPath);
+  const Routers(this.routerPath, this.routerName);
 }

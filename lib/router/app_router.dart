@@ -14,7 +14,7 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: Routers.root.routerPath,
+  initialLocation: Uri.base.toString(),
   redirect: (context, state) {
     final isLoggedIn = FirebaseAuth.instance.currentUser != null;
     final loggingIn = state.matchedLocation == Routers.login.routerPath;
