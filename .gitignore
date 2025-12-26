@@ -54,3 +54,6 @@ app/build/
 
 # Ignore generated localization files
 lib/generated/
+
+# FVM Version Cache
+.fvm/

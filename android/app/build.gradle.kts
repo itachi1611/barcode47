@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "com.fox.barcode47"
     compileSdk = 34
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "26.1.10909125"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

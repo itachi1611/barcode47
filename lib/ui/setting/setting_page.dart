@@ -42,7 +42,7 @@ class SettingPage extends StatelessWidget {
         child: AnimatedContainer(
           height: 40,
           width: 80,
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           duration: const Duration(milliseconds: 350),
           curve: Curves.easeInOut,
           decoration: BoxDecoration(
