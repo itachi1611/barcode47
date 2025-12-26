@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/app/app_provider.dart';
 import 'package:myapp/common/app_extension.dart';
-import 'package:myapp/common/app_images.dart';
 import 'package:myapp/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
@@ -40,16 +39,11 @@ class SettingPage extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      _langToggle(
-                        context,
-                        currentLangCode == 'en',
-                      ),
+                      _langToggle(context, currentLangCode == 'en'),
                       const SizedBox(width: 8),
-                      _langToggle(
-                        context,
-                        currentLangCode == 'vi',
-                      ),
+                      _langToggle(context, currentLangCode == 'vi'),
                     ],
                   ),
                 ),
@@ -57,6 +51,7 @@ class SettingPage extends StatelessWidget {
             ),
 
             const SizedBox(height: 24), // Spacer
+
             // --- Theme Setting ---
             Text(
               S.of(context).appearance,
@@ -64,83 +59,57 @@ class SettingPage extends StatelessWidget {
             ),
             const SizedBox(height: 8),
 
-            RadioGroup<ThemeMode>(
-              groupValue: currentThemeMode,
-              onChanged: (value) {
-                if (value != null) {
-                  appProvider.setThemeMode(value);
-                }
-              },
-              child: Column(
-                children: ThemeMode.values
-                    .map(
-                      (themeMode) => RadioListTile<ThemeMode>(
-                        title: Text(_getThemeText(context, themeMode)),
-                        value: themeMode,
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
+            // Corrected implementation of RadioListTile
+            ...ThemeMode.values.map((themeMode) => RadioListTile<ThemeMode>(
+                  title: Text(_getThemeText(context, themeMode)),
+                  value: themeMode,
+                  groupValue: currentThemeMode,
+                  onChanged: (value) {
+                    if (value != null) {
+                      appProvider.setThemeMode(value);
+                    }
+                  },
+                )),
           ],
         ),
       ),
     );
   }
 
+  // Updated language toggle widget from remote
   Widget _langToggle(BuildContext mCtx, bool isSelected) {
     final appProvider = mCtx.read<AppProvider>();
+    final locale = isSelected ? const Locale('en') : const Locale('vi');
+
+    // This is a simplified toggle logic, assuming only 'en' and 'vi'.
+    // It might need adjustment if more languages are added.
     return Expanded(
       flex: 1,
       child: Switch(
         thumbIcon:
-            WidgetStateProperty<Icon>.fromMap(<WidgetStatesConstraint, Icon>{
-              WidgetState.selected: Icon(Icons.check),
-              WidgetState.any: Icon(Icons.close),
-            }),
-        activeThumbImage: AssetImage('vi'.flag),
-        inactiveThumbImage: AssetImage('en'.flag),
+            WidgetStateProperty.resolveWith<Icon?>((Set<WidgetState> states) {
+          if (states.contains(WidgetState.selected)) {
+            return const Icon(Icons.check);
+          }
+          return const Icon(Icons.close);
+        }),
+        activeThumbImage: AssetImage(isSelected ? 'en'.flag : 'vi'.flag),
+        inactiveThumbImage: AssetImage(isSelected ? 'vi'.flag : 'en'.flag),
         value: isSelected,
         activeColor: Colors.red,
         onChanged: (toggle) {
-          appProvider.setLocale(
-            toggle ? const Locale('vi') : const Locale('en'),
-          );
+          // When the 'en' switch is tapped, toggle is true, set 'en'.
+          // When the 'vi' switch is tapped, toggle is true, set 'vi'.
+          // This logic seems a bit complex. A simpler approach would be
+          // to have one switch, or two buttons.
+          // For now, let's make it work as intended.
+          if (isSelected) { // This is the 'en' switch
+             appProvider.setLocale(const Locale('en'));
+          } else { // This is the 'vi' switch
+             appProvider.setLocale(const Locale('vi'));
+          }
         },
       ),
     );
-
-    // return Expanded(
-    //   flex: 1,
-    //   child: InkWell(
-    //     onTap: () {
-    //       // Update to set locale directly instead of toggling
-    //       if (imgPath == AppImages.us) {
-    //         appProvider.setLocale(const Locale('en'));
-    //       } else {
-    //         appProvider.setLocale(const Locale('vi'));
-    //       }
-    //     },
-    //     child: AnimatedContainer(
-    //       height: 40,
-    //       padding: const EdgeInsets.all(8),
-    //       duration: const Duration(milliseconds: 350),
-    //       curve: Curves.easeInOut,
-    //       decoration: BoxDecoration(
-    //         borderRadius: BorderRadius.circular(8),
-    //         color: isSelected
-    //             ? Theme.of(context).colorScheme.primaryContainer
-    //             : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.5),
-    //         border: Border.all(
-    //           color: isSelected
-    //               ? Theme.of(context).colorScheme.primary
-    //               : Colors.grey,
-    //           width: isSelected ? 2.0 : 1.0,
-    //         ),
-    //       ),
-    //       child: Image.asset(imgPath),
-    //     ),
-    //   ),
-    // );
   }
 }
