@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/app/app_provider.dart';
+import 'package:myapp/common/app_theme.dart';
 import 'package:myapp/firebase_options.dart';
 import 'package:myapp/generated/l10n.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      routerConfig: router,
+      routerConfig: AppRouter.router,
       locale: context.watch<AppProvider>().locale,
 
       // Sử dụng lại cấu hình từ Flutter Intl
@@ -47,10 +48,9 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: context.watch<AppProvider>().themeMode, // Kết nối với AppProvider
     );
   }
 }

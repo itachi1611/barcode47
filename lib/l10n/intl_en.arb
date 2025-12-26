@@ -1,9 +1,11 @@
 {
-    "@@locale": "en",
-    "home": "Home",
-    "view": "View",
-    "setting": "Setting",
-    "language": "Language",
-    "eng": "English",
-    "vns": "Vietnamese"
+  "@@locale": "en",
+  "setting": "Settings",
+  "language": "Language",
+  "appearance": "Appearance",
+  "light_mode": "Light",
+  "dark_mode": "Dark",
+  "system_default": "System Default",
+  "home": "Home",
+  "view": "View"
 }

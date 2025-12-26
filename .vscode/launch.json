@@ -7,7 +7,11 @@
         {
             "name": "myapp",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "--flavor",
+                "dev"
+            ]
         },
         {
             "name": "myapp (profile mode)",

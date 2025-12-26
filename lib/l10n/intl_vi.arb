@@ -1,9 +1,11 @@
 {
-    "@@locale": "vi",
-    "home": "Trang chủ",
-    "view": "Xem",
-    "setting": "Cài đặt",
-    "language": "Ngôn ngữ",
-    "eng": "Tiếng Anh",
-    "vns": "Tiếng Việt"
+  "@@locale": "vi",
+  "setting": "Cài đặt",
+  "language": "Ngôn ngữ",
+  "appearance": "Giao diện",
+  "light_mode": "Sáng",
+  "dark_mode": "Tối",
+  "system_default": "Mặc định hệ thống",
+  "home": "Trang chủ",
+  "view": "Xem"
 }

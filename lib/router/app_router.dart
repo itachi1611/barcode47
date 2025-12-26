@@ -1,123 +1,106 @@
-import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:myapp/router/routers.dart';
+import 'package:myapp/ui/home/home_page.dart';
+import 'package:myapp/ui/main_shell.dart';
+import 'package:myapp/ui/setting/setting_page.dart';
+import 'package:myapp/ui/splash_page.dart';
+import 'package:myapp/ui/view/view_page.dart';
 
-import '../ui/home/home_page.dart';
-import '../ui/main_shell.dart';
-import '../ui/setting/setting_page.dart';
-import '../ui/splash_page.dart';
-import '../ui/view/view_page.dart';
-import 'routers.dart';
+// Giả định bạn sẽ có một trang Profile
+// import 'package:myapp/ui/profile/profile_page.dart';
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
+import 'navigator_observer.dart';
 
-final router = GoRouter(
-  navigatorKey: _rootNavigatorKey,
-  initialLocation: Uri.base.toString(),
-  redirect: (context, state) {
-    final isLoggedIn = FirebaseAuth.instance.currentUser != null;
-    final loggingIn = state.matchedLocation == Routers.login.routerPath;
+class AppRouter {
+  static final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
-    // Nếu người dùng chưa đăng nhập và không ở trang đăng nhập -> chuyển đến trang đăng nhập
-    if (!isLoggedIn && !loggingIn) {
-      return Routers.login.routerPath;
-    }
+  static final GoRouter router = GoRouter(
+    initialLocation: Routers.root.routerPath,
+    navigatorKey: _rootNavigatorKey,
+    observers: [NavObserver()],
+    redirect: (context, state) {
+      // final isLoggedIn = FirebaseAuth.instance.currentUser != null;
+      // final loggingIn = state.matchedLocation == Routers.login.routerPath;
 
-    // Nếu người dùng đã đăng nhập và đang ở trang đăng nhập -> chuyển đến trang chủ
-    if (isLoggedIn && loggingIn) {
-      return Routers.home.routerPath;
-    }
+      // // Nếu người dùng chưa đăng nhập và không ở trang đăng nhập -> chuyển đến trang đăng nhập
+      // if (!isLoggedIn && !loggingIn) {
+      //   return Routers.login.routerPath;
+      // }
 
-    return null; // không chuyển hướng
-  },
-  routes: [
-    GoRoute(
-      name: Routers.root.routerName,
-      path: Routers.root.routerPath,
-      builder: (context, state) => const SplashPage(),
-    ),
-    // Thêm route cho màn hình đăng nhập
-    GoRoute(
-      name: Routers.login.routerName,
-      path: Routers.login.routerPath,
-      builder: (context, state) {
-        return SignInScreen(
-          providers: [EmailAuthProvider()],
-          actions: [
-            ForgotPasswordAction((context, email) {
-              final uri = Uri(
-                path: '${Routers.login.routerPath}/forgotPassword',
-                queryParameters: <String, String?>{'email': email},
-              );
-              context.push(uri.toString());
-            }),
-          ],
-        );
-      },
-      routes: [
-        GoRoute(
-          path: Routers.forgotPassword.routerPath,
-          name: Routers.forgotPassword.routerName,
-          builder: (context, state) {
-            final arguments = state.uri.queryParameters;
-            return ForgotPasswordScreen(
-              email: arguments['email'],
-              headerMaxExtent: 200,
-            );
-          },
-        ),
-      ],
-    ),
-    // Thêm route cho màn hình hồ sơ người dùng
-    GoRoute(
-      name: Routers.profile.routerName,
-      path: Routers.profile.routerPath,
-      builder: (context, state) {
-        return ProfileScreen(
-          providers: [EmailAuthProvider()],
-          actions: [
-            SignedOutAction((context) {
-              context.go(Routers.login.routerPath);
-            }),
-          ],
-        );
-      },
-    ),
-    // Các route hiện tại của bạn được giữ nguyên
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
-        return MainShell(child: navigationShell);
-      },
-      branches: [
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              name: Routers.home.routerName,
-              path: Routers.home.routerPath,
-              builder: (context, state) => const HomePage(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              name: Routers.view.routerName,
-              path: Routers.view.routerPath,
-              builder: (context, state) => const ViewPage(),
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              name: Routers.setting.routerName,
-              path: Routers.setting.routerPath,
-              builder: (context, state) => const SettingPage(),
-            ),
-          ],
-        ),
-      ],
-    ),
-  ],
-);
+      // // Nếu người dùng đã đăng nhập và đang ở trang đăng nhập -> chuyển đến trang chủ
+      // if (isLoggedIn && loggingIn) {
+      //   return Routers.home.routerPath;
+      // }
+
+      return null; // không chuyển hướng
+    },
+    routes: [
+      GoRoute(
+        name: Routers.root.routerName,
+        path: Routers.root.routerPath,
+        builder: (context, state) => const SplashPage(),
+      ),
+
+      // Cấu trúc ShellRoute của bạn được giữ nguyên và cập nhật
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          // MainShell đóng vai trò là UI chung (với BottomNavBar)
+          return MainShell(child: navigationShell);
+        },
+        branches: [
+          // Branch cho Tab Home
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                name: Routers.home.routerName,
+                path: Routers.home.routerPath,
+                builder: (context, state) => const HomePage(),
+              ),
+            ],
+          ),
+
+          // Branch cho Tab View
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                name: Routers.view.routerName,
+                path: Routers.view.routerPath,
+                builder: (context, state) => const ViewPage(),
+              ),
+            ],
+          ),
+
+          // Branch cho Tab Setting
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                name: Routers.setting.routerName,
+                path: Routers.setting.routerPath,
+                builder: (context, state) => const SettingPage(),
+              ),
+            ],
+          ),
+
+          // Branch cho Tab Profile
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                name: Routers.profile.routerName,
+                path: Routers.profile.routerPath,
+                builder: (context, state) =>
+                    const Center(child: Text("Profile Page")),
+              ),
+            ],
+          ),
+        ],
+      ),
+
+      // Các route khác không nằm trong Shell có thể được định nghĩa ở đây
+      // ví dụ: một trang chi tiết được mở từ trang home
+    ],
+    errorBuilder: (context, state) =>
+        Center(child: Text("Page not found: ${state.error}")),
+  );
+}
