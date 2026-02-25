@@ -24,12 +24,12 @@ class AppRouter {
       // final isLoggedIn = FirebaseAuth.instance.currentUser != null;
       // final loggingIn = state.matchedLocation == Routers.login.routerPath;
 
-      // // Nếu người dùng chưa đăng nhập và không ở trang đăng nhập -> chuyển đến trang đăng nhập
+      // Nếu người dùng chưa đăng nhập và không ở trang đăng nhập -> chuyển đến trang đăng nhập
       // if (!isLoggedIn && !loggingIn) {
       //   return Routers.login.routerPath;
       // }
 
-      // // Nếu người dùng đã đăng nhập và đang ở trang đăng nhập -> chuyển đến trang chủ
+      // Nếu người dùng đã đăng nhập và đang ở trang đăng nhập -> chuyển đến trang chủ
       // if (isLoggedIn && loggingIn) {
       //   return Routers.home.routerPath;
       // }
